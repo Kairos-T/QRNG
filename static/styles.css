@@ -15,10 +15,6 @@ h2 {
   color: #333;
 }
 
-form {
-  margin-top: 20px;
-}
-
 form,
 a {
   width: 100%;
@@ -53,7 +49,7 @@ button:hover {
 
 button,
 a button {
-  margin: 10px;
+  margin: 10px 0;
 }
 
 button:focus {
