@@ -55,5 +55,5 @@ python3 app.py
 ![Visualise distribution](screenshots/Plt.png)
 
 ## Limitations
-- **Simulation** - The `qasm_simulator` is simply a classical simulator for quantum circuits, and has limitations in simulationg quantum systems.
+- **Simulation** - The `qasm_simulator` is simply a classical simulator for quantum circuits, and has limitations in simulating quantum systems. Hence, there might be outliers and in the distribution of the generated numbers, as can be seen in the screenshot above.
 
