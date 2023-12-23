@@ -1,82 +1,96 @@
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 20px;
-    text-align: center;
+  font-family: "Arial", sans-serif;
+  margin: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-h1 {
-    color: #333;
+h1,
+h2 {
+  margin-top: 20px;
+  color: #333;
 }
 
 form {
-    margin-top: 20px;
+  margin-top: 20px;
+}
+
+form,
+a {
+  width: 100%;
+  max-width: 400px;
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
-h2 {
-    margin-top: 20px;
-    color: #333;
+button,
+a button {
+  margin: 10px;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (max-width: 600px) {
+  button,
+  a button {
+    width: 100%;
+  }
 }
 
 ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 li {
-    background-color: #f2f2f2;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 4px;
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
 }
 
 .number-columns {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .number-item {
-    width: 100%; 
-    background-color: #f2f2f2;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-@media (min-width: 600px) {
-    .number-item {
-        width: calc(50% - 10px);
-    }
-}
-
-@media (min-width: 900px) {
-    .number-item {
-        width: calc(33.33% - 10px); 
-    }
+  width: 30%;
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
