@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quantum Random Number Generator</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Quantum Random Number Generator</h1>
+
+    <form method="post" action="/">
+      <label for="min_value">Minimum Value:</label>
+      <input
+        type="number"
+        name="min_value"
+        value="{{ request.form['min_value'] if request.form.get('min_value') else '' }}"
+        required
+      />
+
+      <label for="max_value">Maximum Value:</label>
+      <input
+        type="number"
+        name="max_value"
+        value="{{ request.form['max_value'] if request.form.get('max_value') else '' }}"
+        required
+      />
+
+      <button type="submit">Generate Random Number</button>
+      <a href="{{ url_for('clear_numbers') }}"
+        ><button type="button">Clear All Numbers</button></a
+      >
+      <a href="{{ url_for('generate_graph') }}"
+        ><button type="button">Generate Graph</button></a
+      >
+    </form>
+
+    {% if random_number is not none %}
+    <p>Random Number: {{ random_number }}</p>
+    {% endif %} {% if number_counts %}
+    <h2>Number Occurrences:</h2>
+    <p>Total Numbers Generated: {{ total_generated }}</p>
+    <div class="number-columns">
+      {% for number, count in number_counts.items() %}
+      <div class="number-item">{{ number }} - Occurrences: {{ count }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% if plot %}
+    <h2>Number Distribution:</h2>
+    <img src="data:image/png;base64,{{ plot }}" alt="Number Distribution" />
+    {% endif %}
+  </body>
+</html>
