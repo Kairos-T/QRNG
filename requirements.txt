@@ -1,0 +1,5 @@
+Flask==3.0.0
+matplotlib==3.8.2
+qiskit==0.45.1
+qiskit_terra==0.45.1
+qiskit-aer==0.13.1
