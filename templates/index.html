@@ -18,7 +18,7 @@
       <input
         type="number"
         name="min_value"
-        value="{{ request.form['min_value'] if request.form.get('min_value') else '' }}"
+        value="{{ request.form['min_value'] if request.form.get('min_value') else '' | safe }}"
         required
       />
 
@@ -26,7 +26,7 @@
       <input
         type="number"
         name="max_value"
-        value="{{ request.form['max_value'] if request.form.get('max_value') else '' }}"
+        value="{{ request.form['max_value'] if request.form.get('max_value') else '' | safe }}"
         required
       />
 
@@ -41,6 +41,13 @@
 
     {% if random_number is not none %}
     <p>Random Number: {{ random_number }}</p>
+    {% endif %} {% if generated_numbers %}
+    <h2>Generated Numbers:</h2>
+    <ul>
+      {% for number in generated_numbers %}
+      <li>{{ number }}</li>
+      {% endfor %}
+    </ul>
     {% endif %} {% if number_counts %}
     <h2>Number Occurrences:</h2>
     <p>Total Numbers Generated: {{ total_generated }}</p>

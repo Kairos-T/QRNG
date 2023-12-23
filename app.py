@@ -15,7 +15,7 @@ def generate_random_number(min_value, max_value):
     global total_generated
 
     if min_value > max_value:
-        return "Invalid range: Minimum value should be less than or equal to the maximum value"
+        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
 
@@ -67,8 +67,8 @@ def home():
             min_value = int(request.form['min_value'])
             max_value = int(request.form['max_value'])
             random_number = generate_random_number(min_value, max_value)
-        except ValueError:
-            error_message = "Please enter valid integer values for minimum and maximum."
+        except ValueError as e:
+            error_message = str(e)
 
     return render_template('index.html', random_number=random_number, number_counts=number_counts, total_generated=total_generated, error_message=error_message)
 
