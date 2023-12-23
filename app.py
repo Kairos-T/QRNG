@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from qiskit import QuantumCircuit, Aer, transpile, assemble
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -15,7 +15,8 @@ def generate_random_number(min_value, max_value):
     global total_generated
 
     if min_value > max_value:
-        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
+        raise ValueError(
+            "Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
 
@@ -44,6 +45,12 @@ def generate_random_number(min_value, max_value):
     return random_number
 
 
+def generate_100_numbers(min_value, max_value):
+    generated_numbers = [generate_random_number(
+        min_value, max_value) for _ in range(100)]
+    return generated_numbers
+
+
 def plot_bar_chart():
     plt.bar(number_counts.keys(), number_counts.values())
     plt.xlabel('Number')
@@ -66,11 +73,25 @@ def home():
         try:
             min_value = int(request.form['min_value'])
             max_value = int(request.form['max_value'])
-            random_number = generate_random_number(min_value, max_value)
+            if 'generate_100' in request.form:
+                generated_numbers = generate_100_numbers(min_value, max_value)
+                return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
+            else:
+                random_number = generate_random_number(min_value, max_value)
         except ValueError as e:
             error_message = str(e)
 
     return render_template('index.html', random_number=random_number, number_counts=number_counts, total_generated=total_generated, error_message=error_message)
+
+@app.route('/generate_100_numbers', methods=['POST'])
+def generate_100_numbers_route():
+    try:
+        min_value = int(request.form['min_value'])
+        max_value = int(request.form['max_value'])
+        generated_numbers = generate_100_numbers(min_value, max_value)
+        return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
+    except ValueError as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/clear')
