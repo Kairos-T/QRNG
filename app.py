@@ -15,8 +15,7 @@ def generate_random_number(min_value, max_value):
     global total_generated
 
     if min_value > max_value:
-        raise ValueError(
-            "Invalid range: Minimum value should be less than or equal to the maximum value")
+        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
 
@@ -25,8 +24,7 @@ def generate_random_number(min_value, max_value):
     circuit.measure(range(num_bits), range(num_bits))
 
     backend = Aer.get_backend('qasm_simulator')
-    result = backend.run(
-        assemble(transpile(circuit, backend=backend))).result()
+    result = backend.run(assemble(transpile(circuit, backend=backend))).result()
     counts = result.get_counts(circuit)
 
     random_number = int(list(counts.keys())[0], 2)
@@ -35,35 +33,29 @@ def generate_random_number(min_value, max_value):
     random_number = min(max(random_number, min_value), max_value)
 
     # Update the count of the generated number in the dictionary
-    if random_number in number_counts:
-        number_counts[random_number] += 1
-    else:
-        number_counts[random_number] = 1
-
+    number_counts[random_number] = number_counts.get(random_number, 0) + 1
     total_generated += 1
 
     return random_number
 
 
-def generate_100_numbers(min_value, max_value):
+def generate_numbers(min_value, max_value, num_samples=1):
     global total_generated
 
     if min_value > max_value:
-        raise ValueError(
-            "Invalid range: Minimum value should be less than or equal to the maximum value")
+        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
     backend = Aer.get_backend('qasm_simulator')
 
     generated_numbers = []
 
-    for _ in range(100):
+    for _ in range(num_samples):
         circuit = QuantumCircuit(num_bits, num_bits)
         circuit.h(range(num_bits))
         circuit.measure(range(num_bits), range(num_bits))
 
-        result = backend.run(
-            assemble(transpile(circuit, backend=backend))).result()
+        result = backend.run(assemble(transpile(circuit, backend=backend))).result()
         counts = result.get_counts(circuit)
 
         random_number = int(list(counts.keys())[0], 2)
@@ -72,11 +64,7 @@ def generate_100_numbers(min_value, max_value):
         random_number = min(max(random_number, min_value), max_value)
 
         # Update the count of the generated number in the dictionary
-        if random_number in number_counts:
-            number_counts[random_number] += 1
-        else:
-            number_counts[random_number] = 1
-
+        number_counts[random_number] = number_counts.get(random_number, 0) + 1
         total_generated += 1
 
         generated_numbers.append(random_number)
@@ -107,7 +95,7 @@ def home():
             min_value = int(request.form['min_value'])
             max_value = int(request.form['max_value'])
             if 'generate_100' in request.form:
-                generated_numbers = generate_100_numbers(min_value, max_value)
+                generated_numbers = generate_numbers(min_value, max_value, num_samples=100)
                 return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
             else:
                 random_number = generate_random_number(min_value, max_value)
@@ -122,7 +110,7 @@ def generate_100_numbers_route():
     try:
         min_value = int(request.form['min_value'])
         max_value = int(request.form['max_value'])
-        generated_numbers = generate_100_numbers(min_value, max_value)
+        generated_numbers = generate_numbers(min_value, max_value, num_samples=100)
         return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
     except ValueError as e:
         return jsonify({'error': str(e)})
