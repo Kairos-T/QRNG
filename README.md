@@ -48,12 +48,12 @@ python3 app.py
     $$ z = \frac{x - \mu}{\sigma} $$
 
     where:
-    - \( Z \) is the Z-score,
-    - \( x \) is the data point,
-    - \( \mu \) is the mean of the dataset, and
-    - \( \sigma \) is the standard deviation of the dataset.
+    - 𝒵 is the Z-score,
+    - 𝑥 is the data point,
+    - *μ* is the mean of the dataset, and
+    - *σ* is the standard deviation of the dataset.
 
-  - Data points with \( |Z| \) greater than the specified threshold (in this case, 3) are considered outliers and are excluded from the dataset before generating the visualization.
+  - Data points with 𝒵 greater than the specified threshold (in this case, 3) are considered outliers and are excluded from the dataset before generating the visualization.
 
   </details>
 
