@@ -45,15 +45,16 @@ python3 app.py
   - This application uses the Z-score method to remove outliers. Outliers here are defined as numbers that are more than 3 standard deviations away from the mean.
   - Mathematically, the Z-score of a data point \(x\) in a dataset is calculated using the formula:
 
-    \[z = \frac{x - \mu}{\sigma}\]
+    $$ z = \frac{x - \mu}{\sigma} $$
 
     where:
+        - $ Z $ is the Z-score,
+        - $ x $ is the data point,
+        - $ \mu $ is the mean of the dataset, and
+        - $ \sigma $ is the standard deviation of the dataset.
 
-    - \( Z \) is the Z-score,
-    - \( x \) is the data point,
-    - \( \mu \) is the mean of the dataset, and
-    - \( \sigma \) is the standard deviation of the dataset.
-  - Data points with \( |Z| \) greater than the 3 are considered outliers and are excluded from the dataset before generating the visualization.
+  - Data points with $ |Z| $ greater than the specified threshold (in this case, 3) are considered outliers and are excluded from the dataset before generating the visualization.
+
   </details>
 
 ## Usage
