@@ -40,13 +40,14 @@
       <button type="submit" name="generate_100">Generate 100 Numbers</button>
     </form>
 
-    <form>
-      <a href="{{ url_for('clear_numbers') }}"
-        ><button type="button">Clear All Numbers</button></a
-      >
-      <a href="{{ url_for('generate_graph') }}"
-        ><button type="button">Generate Graph</button></a
-      >
+    <a href="{{ url_for('clear_numbers') }}"
+      ><button type="button">Clear All Numbers</button></a
+    >
+    <form method="post" action="{{ url_for('generate_graph') }}">
+      <label for="remove_outliers">Remove Outliers:</label>
+      <input type="checkbox" name="remove_outliers" value="1" />
+
+      <button type="submit">Generate Graph</button>
     </form>
 
     {% if random_number is not none %}

@@ -3,6 +3,8 @@ from qiskit import QuantumCircuit, Aer, transpile, assemble
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+import numpy as np
+from scipy import stats
 
 app = Flask(__name__)
 
@@ -15,7 +17,8 @@ def generate_random_number(min_value, max_value):
     global total_generated
 
     if min_value > max_value:
-        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
+        raise ValueError(
+            "Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
 
@@ -24,7 +27,8 @@ def generate_random_number(min_value, max_value):
     circuit.measure(range(num_bits), range(num_bits))
 
     backend = Aer.get_backend('qasm_simulator')
-    result = backend.run(assemble(transpile(circuit, backend=backend))).result()
+    result = backend.run(
+        assemble(transpile(circuit, backend=backend))).result()
     counts = result.get_counts(circuit)
 
     random_number = int(list(counts.keys())[0], 2)
@@ -43,7 +47,8 @@ def generate_numbers(min_value, max_value, num_samples=1):
     global total_generated
 
     if min_value > max_value:
-        raise ValueError("Invalid range: Minimum value should be less than or equal to the maximum value")
+        raise ValueError(
+            "Invalid range: Minimum value should be less than or equal to the maximum value")
 
     num_bits = len(bin(max_value)) - 2
     backend = Aer.get_backend('qasm_simulator')
@@ -55,7 +60,8 @@ def generate_numbers(min_value, max_value, num_samples=1):
         circuit.h(range(num_bits))
         circuit.measure(range(num_bits), range(num_bits))
 
-        result = backend.run(assemble(transpile(circuit, backend=backend))).result()
+        result = backend.run(
+            assemble(transpile(circuit, backend=backend))).result()
         counts = result.get_counts(circuit)
 
         random_number = int(list(counts.keys())[0], 2)
@@ -72,8 +78,27 @@ def generate_numbers(min_value, max_value, num_samples=1):
     return generated_numbers
 
 
-def plot_bar_chart():
-    plt.bar(number_counts.keys(), number_counts.values())
+def remove_outliers(data, z_threshold=3):
+    z_scores = np.abs(stats.zscore(data))
+    outliers = np.where(z_scores > z_threshold)[0]
+    cleaned_data = [data[i] for i in range(len(data)) if i not in outliers]
+    return cleaned_data
+
+
+def plot_bar_chart(remove_outliers_flag=False):
+    global number_counts
+    data_keys = list(number_counts.keys())
+    data_values = list(number_counts.values())
+
+    if remove_outliers_flag:
+        cleaned_data = remove_outliers(data_values)
+        number_counts = {key: value for key,
+                         value in zip(data_keys, cleaned_data)}
+        data_values = cleaned_data
+
+    data_keys = data_keys[:len(data_values)]
+
+    plt.bar(data_keys, data_values)
     plt.xlabel('Number')
     plt.ylabel('Occurrences')
     plt.title('Distribution of Numbers')
@@ -95,7 +120,8 @@ def home():
             min_value = int(request.form['min_value'])
             max_value = int(request.form['max_value'])
             if 'generate_100' in request.form:
-                generated_numbers = generate_numbers(min_value, max_value, num_samples=100)
+                generated_numbers = generate_numbers(
+                    min_value, max_value, num_samples=100)
                 return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
             else:
                 random_number = generate_random_number(min_value, max_value)
@@ -110,7 +136,8 @@ def generate_100_numbers_route():
     try:
         min_value = int(request.form['min_value'])
         max_value = int(request.form['max_value'])
-        generated_numbers = generate_numbers(min_value, max_value, num_samples=100)
+        generated_numbers = generate_numbers(
+            min_value, max_value, num_samples=100)
         return render_template('index.html', generated_numbers=generated_numbers, number_counts=number_counts, total_generated=total_generated)
     except ValueError as e:
         return jsonify({'error': str(e)})
@@ -124,9 +151,13 @@ def clear_numbers():
     return render_template('index.html', random_number=None, number_counts=number_counts, total_generated=total_generated)
 
 
-@app.route('/generate_graph')
+@app.route('/generate_graph', methods=['GET', 'POST'])
 def generate_graph():
-    plot = plot_bar_chart()
+    remove_outliers_flag = False
+    if request.method == 'POST' and 'remove_outliers' in request.form:
+        remove_outliers_flag = True
+
+    plot = plot_bar_chart(remove_outliers_flag)
     return render_template('index.html', plot=plot, random_number=None, number_counts=number_counts, total_generated=total_generated)
 
 
