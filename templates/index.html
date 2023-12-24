@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <title>QRNG</title>
     <link
       rel="stylesheet"
@@ -33,30 +36,18 @@
       <button type="submit" name="generate_single">
         Generate Random Number
       </button>
+
+      <button type="submit" name="generate_100">Generate 100 Numbers</button>
     </form>
 
-    <form method="post" action="/generate_100_numbers">
-      <input
-        type="hidden"
-        name="min_value"
-        value="{{ request.form['min_value'] if request.form.get('min_value') else '' }}"
-      />
-      <input
-        type="hidden"
-        name="max_value"
-        value="{{ request.form['max_value'] if request.form.get('max_value') else '' }}"
-      />
-      <button type="submit" name="generate_100" value="true">
-        Generate 100 Numbers
-      </button>
+    <form>
+      <a href="{{ url_for('clear_numbers') }}"
+        ><button type="button">Clear All Numbers</button></a
+      >
+      <a href="{{ url_for('generate_graph') }}"
+        ><button type="button">Generate Graph</button></a
+      >
     </form>
-
-    <a href="{{ url_for('clear_numbers') }}"
-      ><button type="button">Clear All Numbers</button></a
-    >
-    <a href="{{ url_for('generate_graph') }}"
-      ><button type="button">Generate Graph</button></a
-    >
 
     {% if random_number is not none %}
     <p>Random Number: {{ random_number }}</p>
